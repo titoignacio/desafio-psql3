@@ -1,0 +1,122 @@
+1-CREATE TABLE movies2(
+movies(# id SERIAL,
+movies(# name varchar(30)
+movies(# );
+CREATE TABLE
+
+2-movies=# INSERT INTO movies2 (name) VALUES ('El Rey Leon');
+INSERT 0 1
+
+3-movies=# INSERT INTO movies2 (name) VALUES ('Terminator II');
+INSERT 0 1
+
+4-movies=# ALTER TABLE movies2 ADD COLUMN year integer;
+ALTER TABLE
+movies=# TABLE movies2;
+ id |     name      | year 
+----+---------------+------
+  1 | El Rey Leon   |     
+  2 | Terminator II |     
+
+5-movies=# UPDATE movies2 SET year = 1984;
+UPDATE 2
+movies=# 
+movies=# TABLE movies2;
+ id |     name      | year 
+----+---------------+------
+  1 | El Rey Leon   | 1984
+  2 | Terminator II | 1984
+
+6-DELETE FROM movies2 WHERE name = 'Terminator II';
+DELETE 1
+movies=# TABLE movies2;
+ id |    name     | year 
+----+-------------+------
+  1 | El Rey Leon | 1984
+
+7-movies=# SET role peli;
+SET
+movies=> UPDATE movies2 SET year = 1984;
+ERROR:  permission denied for relation movies2
+
+8-SET role hector;
+SET
+movies=# \du
+                                       List of roles
+     Role name     |                         Attributes                         | Member of 
+-------------------+------------------------------------------------------------+-----------
+ Hector Villalobos | Create role, Create DB                                     | {}
+ hector            | Superuser, Create role, Create DB                          | {}
+ peli              |                                                            | {}
+ postgres          | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+9-movies=# UPDATE movies2 SET year = 1985;
+
+
+PARTE II
+
+1- movies=# INSERT INTO movies2 (name, year) VALUES ('Annabelle', 2015),('Viernes 13', 1988), ('American Pie', 2002), ('El Grinch',2005), ('X-Men', 2000);
+INSERT 0 5
+
+2-SELECT * FROM movies2 WHERE id <=4 ORDER BY name LIMIT 3;
+ id |    name     | year 
+----+-------------+------
+  3 | Annabelle   | 2015
+  1 | El Rey Leon | 1985
+  4 | Viernes 13  | 1988
+
+3-movies=# SELECT * FROM movies2 WHERE id > 3 ORDER BY year LIMIT 3;
+ id |     name     | year 
+----+--------------+------
+  4 | Viernes 13   | 1988
+  7 | X-Men        | 2000
+  5 | American Pie | 2002
+
+4-SELECT COUNT(*) FROM movies2;
+ count 
+-------
+     6
+
+5- SELECT year, COUNT(year) FROM movies2 GROUP BY year;
+ year | count 
+------+-------
+ 2000 |     1
+ 1985 |     1
+ 1988 |     1
+ 2005 |     1
+ 2015 |     1
+ 2002 |     1
+
+6- ALTER TABLE movies2 ADD COLUMN category varchar(30);
+ALTER TABLE
+
+7- UPDATE movies2 SET category =
+movies-# case
+movies-# WHEN id = 1 then 'infantil'
+movies-# WHEN id = 3 then 'adulto'
+movies-# WHEN id = 4 then 'adulto'
+movies-# WHEN id = 5 then 'familiar'
+movies-# WHEN id = 6 then 'infantil'
+movies-# WHEN id = 7 then 'ciencia ficcion'
+movies-# end;
+UPDATE 6
+movies=# TABLE movies2;
+ id |     name     | year |    category     
+----+--------------+------+-----------------
+  1 | El Rey Leon  | 1985 | infantil
+  3 | Annabelle    | 2015 | adulto
+  4 | Viernes 13   | 1988 | adulto
+  5 | American Pie | 2002 | familiar
+  6 | El Grinch    | 2005 | infantil
+  7 | X-Men        | 2000 | ciencia ficcion
+
+8- SELECT category, COUNT(year) FROM movies2 GROUP BY category;
+    category     | count 
+-----------------+-------
+ ciencia ficcion |     1
+ infantil        |     2
+ familiar        |     1
+ adulto          |     2
+
+
+
